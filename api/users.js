@@ -2,9 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
+const queries = require("../db/userqueries");
+
 router.get("/", (req, res) => {
-  res.json({
-    message: "muestra users"
+  queries.getAll().then(users => {
+    res.json(users);
   });
 });
 

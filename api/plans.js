@@ -2,9 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
+const queries = require("../db/planqueries");
+
 router.get("/", (req, res) => {
-  res.json({
-    message: "muestra plans"
+  queries.getAll().then(plans => {
+    res.json(plans);
   });
 });
 

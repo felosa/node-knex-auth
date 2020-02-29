@@ -2,9 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
+const queries = require("../db/tripqueries");
+
 router.get("/", (req, res) => {
-  res.json({
-    message: "muestra trips"
+  queries.getAll().then(trips => {
+    res.json(trips);
   });
 });
 
