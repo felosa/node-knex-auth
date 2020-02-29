@@ -7,12 +7,6 @@ exports.up = function(knex) {
     table.text("image");
     table.text("description");
     table.text("country");
-    table.integer("tripId")
-      .unsigned();
-    table
-      .foreign("tripId")
-      .references("trip.id")
-      .onDelete("SET NULL");
     table.datetime("createdAt").defaultTo(knex.fn.now());
     table.datetime("updatedAt").defaultTo(knex.fn.now());
   });

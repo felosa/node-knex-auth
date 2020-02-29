@@ -4,7 +4,11 @@ exports.up = function(knex) {
     table.text("name");
     table.text("city");
     table.text("image");
-    table.text("owner");
+    table.integer("owner").unsigned();
+    table
+      .foreign("owner")
+      .references("user.id")
+      .onDelete("SET NULL");
     table.text("dateStart");
     table.text("dateEnd");
     table.datetime("createdAt").defaultTo(knex.fn.now());
