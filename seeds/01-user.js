@@ -30,7 +30,6 @@ exports.seed = function(knex) {
           image: "",
           description: "I want to run in every field",
           country: "Spain",
-          tripId: 1
         }
       ]);
     });

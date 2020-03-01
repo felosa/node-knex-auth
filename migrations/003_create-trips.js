@@ -2,12 +2,16 @@ exports.up = function(knex) {
   return knex.schema.createTable("trip", table => {
     table.increments();
     table.text("name");
-    table.text("city");
     table.text("image");
-    table.integer("owner").unsigned();
+    table.integer("userId").unsigned();
     table
-      .foreign("owner")
+      .foreign("userId")
       .references("user.id")
+      .onDelete("SET NULL");
+    table.integer("city").unsigned();
+    table
+      .foreign("city")
+      .references("city.id")
       .onDelete("SET NULL");
     table.text("dateStart");
     table.text("dateEnd");

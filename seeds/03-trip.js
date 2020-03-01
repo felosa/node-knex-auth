@@ -7,24 +7,25 @@ exports.seed = function(knex) {
       return knex("trip").insert([
         {
           name: "Trip to Madrid",
-          city: "MADRID",
           image: "",
-          owner: "1",
+          userId: 1,
+          city: 1,
           dateStart: "2020-02-01",
           dateEnd: "2020-02-10",
         },
         {
           name: "Trip to Edinburgh",
-          city: "EDINBURGH",
           image: "",
-          owner: "1",
+          userId: 1,
+          city: 2,
           dateStart: "2020-02-11",
           dateEnd: "2020-02-20",
         },
         {
           name: "Trip to Edinburgh",
-          owner: 1,
-          city: "EDIMBURGH",
+          image: "",
+          userId: 1,
+          city: 2,
           dateStart: "2020-02-11",
           dateEnd: "2020-02-20",
         }
