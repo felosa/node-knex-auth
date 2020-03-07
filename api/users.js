@@ -10,4 +10,20 @@ router.get("/", (req, res) => {
   });
 });
 
+router.post("/signUp", (req, res) => {
+  queries.create(req.body).then(user => {
+    res.json("Introducido");
+  });
+});
+
+router.post("/upDate/:id", (req, res) => {
+  queries.updateUser(req.params.id, req.body).then(user => {
+    res.json("Introducido");
+  });
+});
+
+router.post("/login", (req, res, next) => {
+  queries.login(req, res, next)
+});
+
 module.exports = router;
