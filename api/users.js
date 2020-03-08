@@ -23,7 +23,10 @@ router.post("/upDate/:id", (req, res) => {
 });
 
 router.post("/login", (req, res, next) => {
-  queries.login(req, res, next)
+  queries.login(req, res, next);
 });
 
+router.get("/isLoged/:token", (req, res, next) => {
+  queries.isLoged(req, res, next);
+});
 module.exports = router;

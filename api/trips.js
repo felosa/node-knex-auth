@@ -4,24 +4,19 @@ const router = express.Router();
 
 const queries = require("../db/tripqueries");
 
-function isValidId(req, res, next) {
-  if (!isNaN(req.params.id)) return next();
-  next(new Error("Invalid ID"));
-}
-
 function validTrip(plan) {
   const hasName = typeof plan.name == "string" && plan.name.trim() != "";
   return hasName;
 }
 
-router.get("/", (req, res) => {
-  queries.getAll().then(trips => {
+router.get("/:userId", (req, res) => {
+  queries.userTrips(req.params.userId).then(trips => {
     res.json(trips);
   });
 });
 
-router.get("/:id", isValidId, (req, res) => {
-  queries.getOne(req.params.id).then(trip => {
+router.get("/oneTrip/:idTrip", (req, res) => {
+  queries.getOne(req.params.idTrip).then(trip => {
     res.json(trip);
   });
 });
@@ -42,7 +37,7 @@ router.put("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id", isValidId, (req, res) => {
+router.delete("/:id", (req, res) => {
   queries.delete(req.params.id).then(() => {
     res.json({
       delete: true

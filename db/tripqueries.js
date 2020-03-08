@@ -1,8 +1,20 @@
 const knex = require("./knex"); //the connection
 
 module.exports = {
-  getAll() {
-    return knex("trip");
+  userTrips(userId) {
+    return knex("trip")
+      .where("userId", userId)
+      .leftJoin("city", "city.id", `trip.city`)
+      .leftJoin("user", "user.id", `trip.userId`)
+      .select(
+        "trip.id",
+        "trip.name",
+        "trip.image",
+        "user.name as tripOwner",
+        "city.name as tripCity",
+        "trip.dateStart",
+        "trip.dateEnd"
+      );
   },
   getOne(id) {
     return knex("trip")

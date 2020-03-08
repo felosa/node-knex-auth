@@ -13,8 +13,6 @@ module.exports = {
           reject(err);
         }
 
-        console.log(salt);
-
         bcrypt.hash(user.password, salt).then((hash, err) => {
           if (err) {
             this.logger.logError(err, "registerUser");
@@ -27,7 +25,6 @@ module.exports = {
             email: user.email,
             password: hash
           };
-          console.log(newUser);
           return knex("user").insert(newUser, "*");
         });
       })
@@ -44,20 +41,21 @@ module.exports = {
     const password = req.body.password;
     let loadedUser;
     knex("user")
-      .where("email", email).first()
+      .where("email", email)
+      .first()
       .then(user => {
         if (!user) {
-          const error = new Error('A user with this email could not be found.');
+          const error = new Error("A user with this email could not be found.");
           error.statusCode = 401;
           throw error;
         }
         loadedUser = user;
-        console.log(loadedUser)
+        console.log(loadedUser);
         return bcrypt.compare(password, user.password);
       })
       .then(isEqual => {
         if (!isEqual) {
-          const error = new Error('Wrong password!');
+          const error = new Error("Wrong password!");
           error.statusCode = 401;
           throw error;
         }
@@ -66,11 +64,10 @@ module.exports = {
             email: loadedUser.email,
             userId: loadedUser.id
           },
-          'somesupersecretsecret',
-          { expiresIn: '3h' }
+          "somesupersecretsecret",
+          { expiresIn: "3h" }
         );
-        console.log(loadedUser, "user")
-        res.status(200).json({ token: token, userId: loadedUser.id});
+        res.status(200).json({ token: token, user: loadedUser });
       })
       .catch(err => {
         if (!err.statusCode) {
@@ -80,8 +77,37 @@ module.exports = {
       });
   },
 
+  isLoged(req, res, next) {
+    //get current user from token
+    // check header or url parameters or post parameters for token
+    var token = req.params.token || req.query.token;
+    if (!token) {
+      return res.status(401).json({ message: "Must pass token" });
+    }
+    // Check token that was passed by decoding token using secret
+    jwt.verify(token, "somesupersecretsecret", function(err, user) {
+      if (err) throw err;
+      console.log(user.userId);
+      //return user using the id from w/in JWTToken
+      knex("user")
+        .where("id", user.userId)
+        .first()
+        .then(response => {
+          console.log(response);
+          // user = utils.getCleanUser(user);
+          //Note: you can renew token by creating new token(i.e.
+          //refresh it)w/ new expiration time at this point, but I’m
+          //passing the old token back.
+          // var token = utils.generateToken(user);
+          res.json({
+            user: response,
+            token: token
+          });
+        });
+    });
+  },
+
   updateUser(id, user) {
-    console.log(user, id);
     bcrypt
       .genSalt(10)
       .then((salt, err) => {
@@ -99,7 +125,6 @@ module.exports = {
 
             reject(err);
           }
-          console.log(user);
           const newUser = {
             name: user.name,
             email: user.email,
@@ -108,7 +133,6 @@ module.exports = {
             description: user.description,
             country: user.country
           };
-          console.log(newUser);
           return knex("user")
             .where("id", id)
             .update(newUser, "*");
