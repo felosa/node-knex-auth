@@ -25,7 +25,7 @@ module.exports = {
             email: user.email,
             password: hash
           };
-          return knex("user").insert(newUser, "*");
+          return knex("users").insert(newUser, "*");
         });
       })
       .then(result => {
@@ -40,7 +40,7 @@ module.exports = {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
-    knex("user")
+    knex("users")
       .where("email", email)
       .first()
       .then(user => {
@@ -89,7 +89,7 @@ module.exports = {
       if (err) throw err;
       console.log(user.userId);
       //return user using the id from w/in JWTToken
-      knex("user")
+      knex("users")
         .where("id", user.userId)
         .first()
         .then(response => {
@@ -133,7 +133,7 @@ module.exports = {
             description: user.description,
             country: user.country
           };
-          return knex("user")
+          return knex("users")
             .where("id", id)
             .update(newUser, "*");
         });
@@ -144,6 +144,6 @@ module.exports = {
   },
 
   getAll() {
-    return knex("user");
+    return knex("users");
   }
 };
