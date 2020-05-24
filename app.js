@@ -20,8 +20,6 @@ const app = express();
 
 app.use(cors(corsOptions));
 
-const plans = require("./api/plans");
-const trips = require("./api/trips");
 const users = require("./api/users");
 // view engine setup
 
@@ -30,8 +28,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/api/plans", plans);
-app.use("/api/trips", trips);
 app.use("/api/users", users);
 
 // catch 404 and forward to error handler
